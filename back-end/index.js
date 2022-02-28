@@ -17,6 +17,11 @@ app.get('/arvores', async (req, res) => {
     res.send(arvores);
 });
 
+app.get('/pins',async (req, res) => {
+    console.log('get /pins');
+    const arvores = await db.getPins();
+    res.send(arvores);
+});
 
 http.createServer(app).listen(3000, function () {
     console.log('Listening on port 3000!');

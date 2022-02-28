@@ -14,4 +14,10 @@ async function getTrees(){
     return result;
 }
 
-module.exports = {getTrees}
+async function getPins(){
+  const conn = await connect();
+    const [result] = await conn.query('select latitude,longitude from arvore;');
+    return result;
+}
+
+module.exports = {getTrees,getPins}
