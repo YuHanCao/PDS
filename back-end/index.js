@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const bodyParser = require("body-parser");
 var http = require('http');
 const app = express();
@@ -9,6 +10,7 @@ app.use(
     })
 );
 
+app.use(cors());
 app.use(bodyParser.json());
 
 app.get('/arvores', async (req, res) => {
@@ -23,7 +25,7 @@ app.get('/pins',async (req, res) => {
     res.send(arvores);
 });
 
-http.createServer(app).listen(3000, function () {
-    console.log('Listening on port 3000!');
+http.createServer(app).listen(3030, function () {
+    console.log('Listening on port 3030!');
 })
 
