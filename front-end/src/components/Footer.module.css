@@ -1,0 +1,41 @@
+/* Footer */
+
+.footer {
+  background: #6d5306;
+  width: 100%;
+  height: auto;
+  display: inline-block;
+  text-align: center;
+}
+
+.footer p {
+  font-size: 18px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  color: #fff;
+  padding: 10px 0;
+}
+
+.logo img {
+  width: 15%;
+  height: auto;
+  float: left;
+  padding-left: 35px;
+}
+
+.texto_meio,
+.texto_direita {
+  margin-top: 20px;
+  display: inline-block;
+  padding: 10px 30px;
+  text-align: left;
+}
+
+.texto_direita ul li {
+  display: inline-block;
+  padding: 10px 0;
+}
+
+.texto_direita a {
+  color: #fff1ff;
+}

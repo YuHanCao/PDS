@@ -1,0 +1,19 @@
+.faixa {
+  width: 100%;
+  height: 120px;
+  background-color: #afc666;
+}
+
+.faixa p {
+  text-align: center;
+  padding-top: 30px;
+  font-size: 55px;
+  margin-top: 0px;
+  color: white;
+  text-transform: uppercase;
+}
+
+.mapa {
+  height: 800px;
+  margin: 50px 100px;
+}
