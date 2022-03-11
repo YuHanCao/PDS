@@ -53,6 +53,7 @@ const Mapa = () => {
           {
             pins.map((pin,index) => (
                     <Marker
+                    key={pin.id}
                     text={'Árvore'}
                     position={{
                         lat: pin.latitude,

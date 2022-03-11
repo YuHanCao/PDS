@@ -58,7 +58,7 @@ const CloseModalButton = styled(MdClose)`
 `
 
 export const Modal = ({ showModal, setShowModal, arvoreBase }) => {
-    const arvore = '';
+    let arvore = null;
     if(arvoreBase){
         arvore = JSON.parse(arvoreBase);
     }
@@ -88,7 +88,7 @@ export const Modal = ({ showModal, setShowModal, arvoreBase }) => {
                 <ModalWrapper showModal={showModal}>
                     <ModalContent>
                         <h1>Informações Sobre a árvore</h1>
-                        <p>{arvore.localizacaoNome}</p>
+                        <p>{arvore?.localizacaoNome}</p>
                         <button>Solicite uma Poda</button> 
                     </ModalContent>
                     <CloseModalButton arial-label='Close modal' onClick={() => setShowModal(prev => !prev)} />
