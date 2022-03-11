@@ -1,59 +1,51 @@
 import styles from './Plantio.module.css'
-// import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 import React, { useState, useCallback } from 'react'; 
-// import { formatRelative } from "date-fns";
 import '../App.css';
 import MyGoogleMap from '../components/MyGoogleMap';
 import Mapa from '../components/Mapa';
+import styled from 'styled-components';
+import { Modal } from '../components/Modal'
+import { GlobalStyles } from '../components/globalStyles';
 
-// const libraries = ["places"]
-// const mapContainerStyle = { 
-//     width: '100%',
-//     height: '100%',
-// }
-// const center = {
-//     lat: -23.5062,
-//     lng: -47.4559
-// }
+
+const Container = styled.div`
+    display:flex;
+    justify-content: center;
+    align-itens: center;
+`
+const Button = styled.button`
+    min-width: 100px;
+    padding: 16px 32px;
+    broder-radius: 4px;  
+    border: none;
+    background: #141414;
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+`
 
 function Plantio() {
-    // const { isLoaded } = useJsApiLoader({
-    //     googleMapsApiKey: "AIzaSyBa2GqDEpWuVXW2k_AIjHcrXLVQZ1t4Pjk",
-    //     id: "google-map-script",
-    //     // libraries,
-    // })
+    const[showModal, setShowModal] = useState(false);
 
-    // const [map, setMap] = useState(null)
-    // const onLoad = useCallback((map)=>{
-    //     const bounds = new window.google.maps.LatLngBounds()
-    //     map.fitBounds(bounds)
-    //     setMap(map)
-    // }, []);
-    // const onUnmount = useCallback(()=>{
-    //     setMap(null)
-    // }, []);
-    
+    const openModal = () => {
+        setShowModal(prev => !prev)
+    }
 
     return (
         <>
-         <div className={styles.faixa}>
-        <p>Plantio - Mapa</p>
-    </div>
+            <div className={styles.faixa}>
+                <p>Plantio - Mapa</p>
+            </div>
 
-    <div className="main-wrapper">
-      <Mapa />
-    </div>
+            <div className="main-wrapper">
+                <Mapa />
+            </div>
 
-    {/* <div className={styles.mapa}>
-        {isLoaded && (
-        <GoogleMap mapContainerStyle={mapContainerStyle}
-            center = {center} 
-            zoom = {14}
-            onLoad = {onLoad}
-            onUnmount = {onUnmount}
-        ></GoogleMap>
-        )}       
-    </div> */}
+            <Container>
+                <Button onClick={openModal}>Teste</Button>
+                <Modal showModal={showModal} setShowModal={setShowModal} />
+                <GlobalStyles/>
+            </Container>
         </>    
     );
 }
