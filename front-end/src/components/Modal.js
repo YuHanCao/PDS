@@ -33,15 +33,19 @@ const ModalContent = styled.div`
     color: #141414;
     
     p {
-        font-size: 30px;
+        margin-top: 1em;
+        font-size: 15px;
         margin-bottom: 1em;
     }
 
     button {
-        padding: 10px 24px;
+        margin-top: 20px;
+        padding: 20px 34px;
         background: #afc666;
         color: #fff;
         border: none;
+        font-size: 20px;
+        border-radius: 5px;
     }
 `
 
@@ -59,8 +63,11 @@ const CloseModalButton = styled(MdClose)`
 
 export const Modal = ({ showModal, setShowModal, arvoreBase }) => {
     let arvore = null;
+    let data = [];
     if(arvoreBase){
         arvore = JSON.parse(arvoreBase);
+        data = arvore?.dataPlantio.split('T')[0];
+        data = data.split('-');
     }
     const modalRef = useRef();
 
@@ -87,8 +94,8 @@ export const Modal = ({ showModal, setShowModal, arvoreBase }) => {
             <Background ref={modalRef} onClick={closeModal}>
                 <ModalWrapper showModal={showModal}>
                     <ModalContent>
-                        <h1>Informações Sobre a árvore</h1>
-                        <p>{arvore?.localizacaoNome}</p>
+                        <h1>Localização: {arvore?.localizacaoNome}</h1>
+                        <p>Data do plantio: {`${data[2]}/${data[1]}/${data[0]}`}</p>
                         <button>Solicite uma Poda</button> 
                     </ModalContent>
                     <CloseModalButton arial-label='Close modal' onClick={() => setShowModal(prev => !prev)} />
