@@ -4,7 +4,7 @@ import '../App.css';
 import MyGoogleMap from '../components/MyGoogleMap';
 import Mapa from '../components/Mapa';
 import styled from 'styled-components';
-import { Modal } from '../components/Modal'
+import { Modal } from '../components/Modal';
 import { GlobalStyles } from '../components/globalStyles';
 
 
@@ -42,8 +42,8 @@ function Plantio() {
             </div>
 
             <Container>
-                <Button onClick={openModal}>Teste</Button>
-                <Modal showModal={showModal} setShowModal={setShowModal} />
+                {/* <Button onClick={openModal}>Teste</Button>
+                <Modal showModal={showModal} setShowModal={setShowModal} /> */}
                 <GlobalStyles/>
             </Container>
         </>    
