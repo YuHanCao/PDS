@@ -58,7 +58,10 @@ const CloseModalButton = styled(MdClose)`
 `
 
 export const Modal = ({ showModal, setShowModal, arvoreBase }) => {
-    const arvore = JSON.parse(arvoreBase);
+    const arvore = '';
+    if(arvoreBase){
+        arvore = JSON.parse(arvoreBase);
+    }
     const modalRef = useRef();
 
     const closeModal = e => {
