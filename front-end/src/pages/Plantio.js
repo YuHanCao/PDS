@@ -4,6 +4,7 @@ import React, { useState, useCallback } from 'react';
 // import { formatRelative } from "date-fns";
 import '../App.css';
 import MyGoogleMap from '../components/MyGoogleMap';
+import Mapa from '../components/Mapa';
 
 // const libraries = ["places"]
 // const mapContainerStyle = { 
@@ -40,7 +41,7 @@ function Plantio() {
     </div>
 
     <div className="main-wrapper">
-      <MyGoogleMap />
+      <Mapa />
     </div>
 
     {/* <div className={styles.mapa}>

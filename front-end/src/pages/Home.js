@@ -1,19 +1,8 @@
 import styles from './Home.module.css'
 
-import Axios from "axios"
-
-function testBD(){
-    Axios.get('http://localhost:3030/pins').then((res)=>{
-        window.alert(JSON.stringify(res));
-    });
-}
-
 function Home() {
     return (
         <>
-        <button onClick={testBD}>
-            Teste BD!
-        </button>
             <section className={styles.explicativo}>
         <div className={styles.texto}>
             <div>
