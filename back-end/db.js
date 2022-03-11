@@ -16,7 +16,7 @@ async function getTrees(){
 
 async function getPins(){
   const conn = await connect();
-    const [result] = await conn.query('select latitude,longitude from arvore;');
+    const [result] = await conn.query('select id, latitude, longitude from arvore;');
     return result;
 }
 
