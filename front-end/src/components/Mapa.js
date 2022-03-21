@@ -1,4 +1,4 @@
-import React, { useEffect, Component, useState } from 'react';
+import React, { useEffect, Component, useState, useCallback } from 'react';
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 import Axios from "axios";
 
@@ -6,11 +6,12 @@ import { Modal } from '../components/Modal'
 
 const Mapa = () => {
    
-    const [map, setMap] = React.useState(null);
-    const [pins, setPins] = React.useState([]);
-    const [dadosArvores, setDadosArvores] = React.useState([]);
-    const [dadosArvore, setDadosArvore] = React.useState();
-    const[showModal, setShowModal] = useState(false);
+    const [map, setMap] = useState(null);
+    const [pins, setPins] = useState([]);
+    const [dadosArvores, setDadosArvores] = useState([]);
+    const [dadosArvore, setDadosArvore] = useState();
+    const [showModal, setShowModal] = useState(false);
+    const [atualizarPoda, setAtualizarPoda] = useState(false);
 
     useEffect(()=>{
         Axios.get('http://localhost:3030/pins').then((res)=>{
@@ -19,7 +20,7 @@ const Mapa = () => {
         Axios.get('http://localhost:3030/arvores').then((res)=>{
             setDadosArvores(res.data);
         });
-    },[]);
+    },[atualizarPoda]);
 
     const containerStyle = {
         width: '100%',
@@ -35,7 +36,7 @@ const Mapa = () => {
         id: 'google-map-script',
         googleMapsApiKey: "AIzaSyBa2GqDEpWuVXW2k_AIjHcrXLVQZ1t4Pjk"
     })   
-    const onLoad = React.useCallback(function callback(map) {
+    const onLoad = useCallback(function callback(map) {
         const bounds = new window.google.maps.LatLngBounds();
         map.fitBounds(bounds);
         setMap(map)
@@ -51,7 +52,7 @@ const Mapa = () => {
           onLoad={onLoad}
         >
           {
-            pins.map((pin,index) => (
+            pins.map((pin) => (
                     <Marker
                     key={pin.id}
                     text={'Árvore'}
@@ -69,7 +70,7 @@ const Mapa = () => {
           }
           <></>
         </GoogleMap>
-        <Modal showModal={showModal} setShowModal={setShowModal} arvoreBase={dadosArvore}/>
+        <Modal showModal={showModal} setShowModal={setShowModal} arvoreBase={dadosArvore} setAtualizarPoda={setAtualizarPoda} atualizarPoda={atualizarPoda}/>
         </>
     ) : <></>
   };

@@ -1,6 +1,7 @@
-import React, {useRef, useEffect, useCallback} from "react";
+import React, {useRef, useEffect, useCallback, useState} from "react";
 import styled from "styled-components";
 import { MdClose } from 'react-icons/md';
+import Axios from "axios";
 
 const Background = styled.div`
     width: 100%;
@@ -37,16 +38,6 @@ const ModalContent = styled.div`
         font-size: 15px;
         margin-bottom: 1em;
     }
-
-    button {
-        margin-top: 20px;
-        padding: 20px 34px;
-        background: #afc666;
-        color: #fff;
-        border: none;
-        font-size: 20px;
-        border-radius: 5px;
-    }
 `
 
 const CloseModalButton = styled(MdClose)`
@@ -60,8 +51,30 @@ const CloseModalButton = styled(MdClose)`
     passing: 0;
     z-index: 10;
 `
+const BotaoPoda = styled.button`
+    margin-top: 20px;
+    padding: 20px 34px;
+    background: #afc666;
+    color: #fff;
+    border: none;
+    font-size: 20px;
+    border-radius: 5px;
+`
 
-export const Modal = ({ showModal, setShowModal, arvoreBase }) => {
+const BotaoPodaDesabilitado = styled.button`
+    margin-top: 20px;
+    padding: 20px 34px;
+    background: #666;
+    color: #fff;
+    border: none;
+    font-size: 20px;
+    border-radius: 5px;
+    font-style: italic;
+`
+
+export const Modal = ({ showModal, setShowModal, arvoreBase, setAtualizarPoda, atualizarPoda }) => {
+    const [flag, setFlag] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
     let arvore = null;
     let data = [];
     if(arvoreBase){
@@ -78,8 +91,12 @@ export const Modal = ({ showModal, setShowModal, arvoreBase }) => {
     }
 
     const keyPress = useCallback(e => {
-    if(e.key == 'Escape' && showModal) {
-        setShowModal(false);
+        if(e.key === 'Escape' && showModal) {
+            setShowModal(false);
+            setShowAlert(false);
+            if(flag) {
+                setAtualizarPoda(!atualizarPoda);
+            }
         }
     }, [setShowModal, showModal])
               
@@ -96,9 +113,30 @@ export const Modal = ({ showModal, setShowModal, arvoreBase }) => {
                     <ModalContent>
                         <h1>Localização: {arvore?.localizacaoNome}</h1>
                         <p>Data do plantio: {`${data[2]}/${data[1]}/${data[0]}`}</p>
-                        <button>Solicite uma Poda</button> 
+                        {arvore?.podaSolicitada === 0 
+                        ? (<BotaoPoda onClick={()=>{
+                            Axios.patch(`http://localhost:3030/solicitarPoda/${arvore?.id}`).then((res)=>{
+                                setFlag(true);
+                                setShowAlert(true);
+                            });
+                        }}>Solicite uma Poda</BotaoPoda>)
+                        : (<BotaoPodaDesabilitado disabled>Poda já solicitada...</BotaoPodaDesabilitado>)} 
                     </ModalContent>
                     <CloseModalButton arial-label='Close modal' onClick={() => setShowModal(prev => !prev)} />
+                </ModalWrapper>
+            </Background>
+        ) : null}
+        {showAlert ? (
+            <Background ref={modalRef} onClick={closeModal}>
+                <ModalWrapper showModal={showModal}>
+                    <ModalContent>
+                        <h1>Poda solictada com sucesso</h1>
+                        <CloseModalButton arial-label='Close modal' onClick={() => {
+                            setShowAlert(false);
+                            setShowModal(prev => !prev);
+                            setAtualizarPoda(!atualizarPoda);
+                        }} />
+                    </ModalContent>
                 </ModalWrapper>
             </Background>
         ) : null}

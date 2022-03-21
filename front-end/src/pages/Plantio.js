@@ -42,8 +42,6 @@ function Plantio() {
             </div>
 
             <Container>
-                {/* <Button onClick={openModal}>Teste</Button>
-                <Modal showModal={showModal} setShowModal={setShowModal} /> */}
                 <GlobalStyles/>
             </Container>
         </>    

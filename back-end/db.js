@@ -10,14 +10,20 @@ async function connect(){
 
 async function getTrees(){
   const conn = await connect();
-    const [result] = await conn.query('select * from arvore;');
-    return result;
+  const [result] = await conn.query('select * from arvore;');
+  return result;
 }
 
 async function getPins(){
   const conn = await connect();
-    const [result] = await conn.query('select id, latitude, longitude from arvore;');
-    return result;
+  const [result] = await conn.query('select id, latitude, longitude from arvore;');
+  return result;
 }
 
-module.exports = {getTrees,getPins}
+async function solicitarPoda(idArvore){
+  const conn = await connect();
+  const [result] = await conn.query(`update arvore set podaSolicitada = 1 where id = ${idArvore}`);
+  return result;
+}
+
+module.exports = {getTrees,getPins, solicitarPoda}

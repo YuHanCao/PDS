@@ -13,17 +13,24 @@ app.use(
 app.use(cors());
 app.use(bodyParser.json());
 
-app.get('/arvores', async (req, res) => {
+app.get('/arvores', async (_, res) => {
     console.log('get /arvores');
     const arvores = await db.getTrees();
     res.send(arvores);
 });
 
-app.get('/pins',async (req, res) => {
+app.get('/pins',async (_, res) => {
     console.log('get /pins');
     const arvores = await db.getPins();
     res.send(arvores);
 });
+
+app.patch('/solicitarPoda/:idArvore', async (req, res) => {
+    const {idArvore} = req.params;
+    console.log(`patch /solicitarPoda/${idArvore}`);
+    const solicitacao = await db.solicitarPoda(idArvore);
+    res.send(solicitacao);
+})
 
 http.createServer(app).listen(3030, function () {
     console.log('Listening on port 3030!');
