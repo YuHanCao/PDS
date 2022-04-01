@@ -61,38 +61,19 @@ const BotaoPoda = styled.button`
     border-radius: 5px;
 `
 
-const BotaoPodaDesabilitado = styled.button`
-    margin-top: 20px;
-    padding: 20px 34px;
-    background: #666;
-    color: #fff;
-    border: none;
-    font-size: 20px;
-    border-radius: 5px;
-    font-style: italic;
-`
+export const ModalCadastro = ({ showModal, setShowModal, latLong, cancelarCadastro}) => {
 
-export const Modal = ({ showModal, setShowModal, arvoreBase, setAtualizarPoda, atualizarPoda, message }) => {
-    
     const [permissao, updatePermissao] = useState('usuario');
-    const [flag, setFlag] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
-    const [mensagem, updateMensagem] = useState(''); 
-    let arvore = null;
-    let data = [];
-    let dataPoda = [];
-    if(arvoreBase){
-        arvore = JSON.parse(arvoreBase);
-        data = arvore?.dataPlantio.split('T')[0];
-        data = data.split('-');
-        dataPoda = arvore?.ultimaPoda?.split('T')[0];
-        dataPoda = dataPoda?.split('-');
-    }
+    const [endereco, updateEndereco] = useState('');
+
     const modalRef = useRef();
 
     const closeModal = e => {
         if(modalRef.current === e.target) {
             setShowModal(false);
+            updateEndereco('');          
+            cancelarCadastro(false);  
         }
     }
 
@@ -100,11 +81,10 @@ export const Modal = ({ showModal, setShowModal, arvoreBase, setAtualizarPoda, a
         if(e.key === 'Escape' && showModal) {
             setShowModal(false);
             setShowAlert(false);
-            if(flag) {
-                setAtualizarPoda(!atualizarPoda);
-            }
+            cancelarCadastro(false);
+            updateEndereco('');
         }
-    }, [setShowModal, showModal])
+    }, [setShowModal, showModal, endereco])
               
     useEffect(()=> {
         let info = window.localStorage.getItem("@user_cargo");
@@ -119,33 +99,22 @@ export const Modal = ({ showModal, setShowModal, arvoreBase, setAtualizarPoda, a
             <Background ref={modalRef} onClick={closeModal}>
                 <ModalWrapper showModal={showModal}>
                     <ModalContent>
-                        <h1>Localização: {arvore?.localizacaoNome}</h1>
-                        <p>Data do plantio: {`${data[2]}/${data[1]}/${data[0]}`}</p>
-                        {arvore?.ultimaPoda?(
-                            <p>Última Poda: {`${dataPoda[2]}/${dataPoda[1]}/${dataPoda[0]}`}</p>
-                        ):(
-                        <p>Nenhuma poda realizada até o momento!</p>)}
-                        {arvore?.podaSolicitada === 0 
-                        ? (<BotaoPoda onClick={()=>{
-                            updateMensagem('Poda SOLICITADA com sucesso!')
-                            Axios.patch(`http://localhost:3030/solicitarPoda/${arvore?.id}`).then((res)=>{
-                                setFlag(true);
+                        <h1>Escreva o endereço:</h1>
+                        <input value={endereco} onChange={text => {
+                            updateEndereco(text.target.value);
+                        }}/>
+                        <BotaoPoda onClick={()=>{
+                            Axios.post(`http://localhost:3030/cadastroArvore`, {
+                                nome: endereco,
+                                lat: latLong.lat,
+                                long: latLong.long,
+                                data: '2022-04-01'
+                            }).then((res)=>{
                                 setShowAlert(true);
                             });
-                        }}>Solicite uma Poda</BotaoPoda>)
-                        : permissao == 'funcionario' ? (
-                            <BotaoPoda onClick={()=>{                                
-                                updateMensagem('Poda CONFIRMADA com sucesso!')
-                                Axios.patch(`http://localhost:3030/confirmarPoda/${arvore?.id}`).then((res)=>{
-                                    setFlag(true);
-                                    setShowAlert(true);
-                                    });
-                            }}>Confirmar Poda</BotaoPoda>
-                        ) : (
-                            <BotaoPodaDesabilitado disabled>Poda já solicitada...</BotaoPodaDesabilitado>
-                            )} 
+                        }}>Realizar Cadastro</BotaoPoda>
                     </ModalContent>
-                    <CloseModalButton arial-label='Close modal' onClick={() => setShowModal(prev => !prev)} />
+                    <CloseModalButton arial-label='Close modal' onClick={() => {setShowModal(prev => !prev); cancelarCadastro(false);}} />
                 </ModalWrapper>
             </Background>
         ) : null}
@@ -153,11 +122,12 @@ export const Modal = ({ showModal, setShowModal, arvoreBase, setAtualizarPoda, a
             <Background ref={modalRef} onClick={closeModal}>
                 <ModalWrapper showModal={showModal}>
                     <ModalContent>
-                        <h1>{mensagem}</h1>
-                        <CloseModalButton arial-label='Close modal' onClick={() => {
+                        <h1>Cadastro realizado com sucesso!</h1>
+                        <CloseModalButton arial-label='Close modal' onClick={() => {                            
                             setShowAlert(false);
+                            updateEndereco('');
+                            cancelarCadastro(false);
                             setShowModal(prev => !prev);
-                            setAtualizarPoda(!atualizarPoda);
                         }} />
                     </ModalContent>
                 </ModalWrapper>

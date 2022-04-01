@@ -4,7 +4,8 @@ const bodyParser = require("body-parser");
 var http = require('http');
 const app = express();
 const db = require('./db');
-const { OAuth2Client } = require("google-auth-library")
+const { OAuth2Client } = require("google-auth-library");
+const { Console } = require("console");
 
 app.use(
     bodyParser.urlencoded({
@@ -42,7 +43,7 @@ app.patch('/confirmarPoda/:idArvore', async (req, res) => {
 })   
 app.post('/googleLogin', async (req, res) => {
     const client = new OAuth2Client(process.env.CLIENT_ID)
-
+    console.log(`post /googleLogin`);
     console.log(client);
 
     const {token} = req.body;
@@ -54,7 +55,7 @@ app.post('/googleLogin', async (req, res) => {
 
     const payload = ticket.getPayload();
 
-    const auth = await db.getByEmail(payload.email);
+    let auth = await db.getByEmail(payload.email);
     console.log(auth)
     if(auth.length > 0){
        return res.status(200).json({
@@ -63,13 +64,34 @@ app.post('/googleLogin', async (req, res) => {
             autenticado: true
         });  
     } else {
-        return res.status(200).json({
-            message: "Usuario náo cadastrado",
-            user: false,
-            autenticado: false
-        });
-    }
+        await db.createNewUser(payload);
+        auth = await db.getByEmail(payload.email);
+        console.log(`Cadastrado: ${auth}`);
+        if(auth.length > 0){
+            return res.status(200).json({
+                 message: "Login Realizado com Sucesso",
+                 user: auth,
+                 autenticado: true
+             });  
+         } else {
+            return res.status(200).json({
+                message: "Erro ao cadastrar novo usuário",
+                user: false,
+                autenticado: false
+            });
+        }
+    } 
+})
+
+app.post('/cadastroArvore', async (req, res) => {
+    console.log(`post /cadastroArvore`);
+
+    const {nome,lat,long,data} = req.body;
+
+    console.log(`nome: ${nome} \nlatitude: ${lat} \nlongitude: ${long} \ndata:${data}`);
     
+    resultado = await db.cadastrarArvore(nome,lat,long,data);
+    res.send(resultado);
 })
 
 http.createServer(app).listen(3030, function () {
