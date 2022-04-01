@@ -26,4 +26,10 @@ async function solicitarPoda(idArvore){
   return result;
 }
 
-module.exports = {getTrees,getPins, solicitarPoda}
+async function confirmarPoda(idArvore){
+  const conn = await connect();
+  const [result] = await conn.query(`UPDATE arvore SET podaSolicitada = 0, ultimaPoda = '2022-03-31' WHERE id = ${idArvore};`);
+  return result;
+}
+
+module.exports = {getTrees,getPins, solicitarPoda, confirmarPoda}

@@ -1,4 +1,4 @@
-import React, { useEffect, Component, useState, useCallback } from 'react';
+import React, { useEffect, Component, useState, useCallback, Button } from 'react';
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 import Axios from "axios";
 
@@ -7,6 +7,7 @@ import { Modal } from '../components/Modal'
 const Mapa = () => {
    
     const [map, setMap] = useState(null);
+    const [cadastroArvore, cadastrarArvore] = useState(false);
     const [pins, setPins] = useState([]);
     const [dadosArvores, setDadosArvores] = useState([]);
     const [dadosArvore, setDadosArvore] = useState();
@@ -43,13 +44,29 @@ const Mapa = () => {
     }, [])
 
 
+    function updateCadastro(){            
+        cadastrarArvore(!cadastroArvore);
+    }
+
+    function pegarDadosArvore(ev){
+        console.log(`Latitude: ${ev.latLng.lat()} Longitude: ${ev.latLng.lat()}`);
+    }
+
     return isLoaded ? ( 
-        <>      
+        <>  
+        <button onClick={updateCadastro}>Cadastrar árvore</button>    
         <GoogleMap
           mapContainerStyle={containerStyle}
           center={center}
           zoom={16}
           onLoad={onLoad}
+          onClick={ev => {
+              if(cadastroArvore){
+                console.log(`Informe mais dados`);
+                  //Abrir modal
+                pegarDadosArvore(ev);
+              }
+          }}
         >
           {
             pins.map((pin) => (

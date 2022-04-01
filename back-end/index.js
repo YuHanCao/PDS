@@ -32,6 +32,13 @@ app.patch('/solicitarPoda/:idArvore', async (req, res) => {
     res.send(solicitacao);
 })
 
+app.patch('/confirmarPoda/:idArvore', async (req, res) => {
+    const {idArvore} = req.params;
+    console.log(`patch /confirmarPoda/${idArvore}`);
+    const solicitacao = await db.confirmarPoda(idArvore);
+    res.send(solicitacao);
+})
+
 http.createServer(app).listen(3030, function () {
     console.log('Listening on port 3030!');
 })

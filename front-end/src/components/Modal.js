@@ -120,7 +120,15 @@ export const Modal = ({ showModal, setShowModal, arvoreBase, setAtualizarPoda, a
                                 setShowAlert(true);
                             });
                         }}>Solicite uma Poda</BotaoPoda>)
-                        : (<BotaoPodaDesabilitado disabled>Poda já solicitada...</BotaoPodaDesabilitado>)} 
+                        : (<>
+                            <BotaoPodaDesabilitado disabled>Poda já solicitada...</BotaoPodaDesabilitado>
+                            <BotaoPoda onClick={()=>{
+                            Axios.patch(`http://localhost:3030/confirmarPoda/${arvore?.id}`).then((res)=>{
+                                setFlag(true);
+                                setShowAlert(true);
+                                });
+                            }}>Confirmar Poda</BotaoPoda>
+                            </>)} 
                     </ModalContent>
                     <CloseModalButton arial-label='Close modal' onClick={() => setShowModal(prev => !prev)} />
                 </ModalWrapper>
