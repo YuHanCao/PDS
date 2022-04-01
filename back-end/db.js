@@ -8,6 +8,12 @@ async function connect(){
     return connection;
 }
 
+async function getByEmail(email){
+  const conn = await connect();
+  const [result] = await conn.query(`select * from usuario where email = '${email}'`);
+  return result;
+}
+
 async function getTrees(){
   const conn = await connect();
   const [result] = await conn.query('select * from arvore;');
@@ -32,4 +38,4 @@ async function confirmarPoda(idArvore){
   return result;
 }
 
-module.exports = {getTrees,getPins, solicitarPoda, confirmarPoda}
+module.exports = {getTrees,getPins, solicitarPoda, confirmarPoda, getByEmail}
